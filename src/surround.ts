@@ -9,7 +9,8 @@ import {
   MessageItem,
   env,
   Uri,
-  Range,
+  Selection,
+  Position,
 } from "vscode";
 
 interface ISurroundItem {
@@ -91,45 +92,95 @@ function getEnabledSurroundItems(surroundConfig: ISurroundConfig) {
   return items;
 }
 
-function getSelectionRange(): Range | undefined {
+function trimSelection(selection: Selection): Selection | undefined {
   let activeEditor = window.activeTextEditor;
-  if (activeEditor && activeEditor.selection) {
-    const startLine = activeEditor.selection.start.line;
-    const endLine = activeEditor.selection.end.line;
+  if (activeEditor && selection) {
+    const startLine = selection.start.line;
+    const endLine = selection.end.line;
+
+    let startPosition: Position | undefined = undefined;
+    let endPosition: Position | undefined = undefined;
 
     for (let lineNo = startLine; lineNo <= endLine; lineNo++) {
       const line = activeEditor.document.lineAt(lineNo);
-      if (!line.isEmptyOrWhitespace) {
-        return new Range(
-          lineNo,
-          Math.max(
-            line.firstNonWhitespaceCharacterIndex,
-            activeEditor.selection.start.character
-          ),
-          activeEditor.selection.end.line,
-          activeEditor.selection.end.character
-        );
+      if (line.isEmptyOrWhitespace) {
+        continue;
       }
+
+      if (
+        lineNo > startLine &&
+        lineNo === endLine &&
+        selection.end.character < line.firstNonWhitespaceCharacterIndex
+      ) {
+        continue;
+      }
+
+      if (!startPosition) {
+        // find start character index
+        let startCharacter = line.firstNonWhitespaceCharacterIndex;
+
+        if (lineNo === startLine) {
+          startCharacter = Math.max(startCharacter, selection.start.character);
+        }
+
+        startPosition = new Position(lineNo, startCharacter);
+      }
+
+      // find end character index
+      let endCharacter =
+        line.firstNonWhitespaceCharacterIndex + line.text.trim().length;
+
+      if (lineNo === endLine) {
+        endCharacter = Math.min(endCharacter, selection.end.character);
+      }
+
+      endPosition = new Position(lineNo, endCharacter);
+    }
+
+    if (startPosition && endPosition) {
+      return new Selection(startPosition, endPosition);
     }
   }
 
   return undefined;
 }
 
-function applyQuickPick(item: QuickPickItem, surroundItems: ISurroundItem[]) {
+function trimSelections(): void {
   let activeEditor = window.activeTextEditor;
+  if (activeEditor && activeEditor.selections) {
+    const selections: Selection[] = [];
+
+    activeEditor.selections.forEach((selection) => {
+      if (
+        selection.start.line === selection.end.line &&
+        selection.start.character === selection.end.character
+      ) {
+        return false;
+      }
+
+      const trimmedSelection = trimSelection(selection);
+      if (trimmedSelection) {
+        selections.push(trimmedSelection);
+      }
+    });
+
+    activeEditor.selections = selections;
+  }
+}
+
+function applyQuickPick(item: QuickPickItem, surroundItems: ISurroundItem[]) {
+  const activeEditor = window.activeTextEditor;
+
   if (activeEditor && item) {
-    let surroundItem = surroundItems.find((s) => item.label === s.label);
+    const surroundItem = surroundItems.find((s) => item.label === s.label);
     if (surroundItem) {
       try {
-        const range = getSelectionRange();
-        activeEditor.insertSnippet(
-          new SnippetString(surroundItem.snippet),
-          range
-        );
-      } catch (e) {
+        trimSelections();
+        activeEditor.insertSnippet(new SnippetString(surroundItem.snippet));
+      } catch (err) {
         window.showErrorMessage(
-          "Invalid surround snippet: " + surroundItem.label
+          "Could not apply surround snippet: " + surroundItem.label,
+          String(err)
         );
       }
     }
