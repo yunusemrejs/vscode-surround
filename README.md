@@ -20,7 +20,7 @@ A simple yet powerful extension to add wrapper snippets around your code blocks.
 - Fully **customizable**
 - **Custom** wrapper snippets
 - You can assign **shortcuts** for _each_ wrapper snippets separately
-- Nicely formatted
+- Nicely formatted (Preserves indentations 🚀**New!**)
 - Sorts recently used snippets on top 🚀**New!**
 
 ### Demo 1: Choosing a wrapper snippet from quick pick menu
