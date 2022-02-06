@@ -222,8 +222,6 @@ async function showWelcomeOrWhatsNew(
   version: string,
   previousVersion: string | undefined
 ) {
-  // @ts-ignore
-  console.log("previousVersion", previousVersion);
   if (previousVersion !== version) {
     if (window.state.focused) {
       void context.globalState.update(PENDING_FOCUS, undefined);
