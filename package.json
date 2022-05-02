@@ -77,6 +77,11 @@
           "markdownDescription": "Recently used snippets will be displayed on top.",
           "default": true
         },
+        "surround.showUpdateNotifications": {
+          "type": "boolean",
+          "markdownDescription": "Shows notification when there is a new version of the extension.",
+          "default": true
+        },
         "surround.custom": {
           "type": "object",
           "default": {}

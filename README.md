@@ -77,6 +77,7 @@ to get list of commands and pick one of them.
 
 - `showOnlyUserDefinedSnippets` (boolean): Disables default snippets that comes with the extension and shows only used defined snippets.
 - `showRecentlyUsedFirst` (boolean): Recently used snippets will be displayed on top.
+- `showUpdateNotifications` (boolean): Shows notification when there is a new version of the extension.
 
 ## Configuration
 
