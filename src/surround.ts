@@ -344,7 +344,7 @@ export function activate(context: ExtensionContext) {
 
     if (showRecentlyUsedFirst && selectedSurroundItem) {
       surroundItems = surroundItems.filter(
-        (i) => i.label !== item.label && i.description !== item.description
+        (i) => i.label !== item.label || i.description !== item.description
       );
       surroundItems.unshift(selectedSurroundItem);
     }
