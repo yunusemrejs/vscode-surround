@@ -255,7 +255,14 @@ async function showMessage(version: string, previousVersion?: string) {
   const sponsor = { title: "❤ Sponsor" };
   const actions: MessageItem[] = [giveAStar, sponsor];
 
+  const showUpdateNotifications = !!workspace
+    .getConfiguration("surround")
+    .get("showUpdateNotifications");
+
   if (previousVersion) {
+    if (!showUpdateNotifications) {
+      return;
+    }
     actions.unshift(whatsNew);
   }
 
