@@ -108,6 +108,13 @@ function trimSelection(selection: Selection): Selection | undefined {
       }
 
       if (
+        lineNo === startLine &&
+        !line.text.slice(selection.start.character).trim()
+      ) {
+        continue;
+      }
+
+      if (
         lineNo > startLine &&
         lineNo === endLine &&
         selection.end.character < line.firstNonWhitespaceCharacterIndex
