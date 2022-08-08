@@ -189,6 +189,8 @@ you can add `-` (MINUS) sign as a prefix to the language identifiers (_without_ 
 
 As always, I'm open to any contribution and would like to hear your feedback.
 
+PS: [Guide for running @vscode/test-web on WSL 2](https://medium.com/javarevisited/using-wsl-2-with-x-server-linux-on-windows-a372263533c3)
+
 ### Just an important reminder:
 
 If you are planning to contribute to **any** open source project,
