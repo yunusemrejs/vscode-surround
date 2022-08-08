@@ -155,7 +155,7 @@ function trimSelections(): void {
         selection.start.line === selection.end.line &&
         selection.start.character === selection.end.character
       ) {
-        return false;
+        return selections.push(selection);
       }
 
       const trimmedSelection = trimSelection(selection);
