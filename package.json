@@ -62,6 +62,7 @@
     "*"
   ],
   "main": "./out/surround.js",
+  "browser": "./out/surround.js",
   "contributes": {
     "configuration": {
       "type": "object",
