@@ -15,13 +15,14 @@ A simple yet powerful extension to add wrapper snippets around your code blocks.
 
 ## Features
 
-- Supports **language identifiers** 🚀**New!**
+- Now works on [VSCode for Web](https://code.visualstudio.com/docs/editor/vscode-web) 🚀**New!**
+- Supports **language identifiers** 
 - Supports **multi** selections
 - Fully **customizable**
 - **Custom** wrapper snippets
 - You can assign **shortcuts** for _each_ wrapper snippets separately
-- Nicely formatted (Preserves indentations 🚀**New!**)
-- Sorts recently used snippets on top 🚀**New!**
+- Nicely formatted (Preserves indentations)
+- Sorts recently used snippets on top
 
 ### Demo 1: Choosing a wrapper snippet from quick pick menu
 
