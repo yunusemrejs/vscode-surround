@@ -195,21 +195,20 @@ function applySurroundItem(key: string, surroundConfig: ISurroundConfig) {
   }
 }
 
-function registerCommands(
+async function registerCommands(
   context: ExtensionContext,
   surroundConfig: ISurroundConfig
 ) {
-  commands.getCommands().then((cmdList) => {
-    Object.keys(surroundConfig).forEach((key) => {
-      const cmdText = `surround.with.${key}`;
-      if (cmdList.indexOf(cmdText) === -1) {
-        context.subscriptions.push(
-          commands.registerCommand(cmdText, () => {
-            applySurroundItem(key, surroundConfig);
-          })
-        );
-      }
-    });
+  const registeredCommands = await commands.getCommands();
+  Object.keys(surroundConfig).forEach((key) => {
+    const commandText = `surround.with.${key}`;
+    if (!registeredCommands.includes(commandText)) {
+      context.subscriptions.push(
+        commands.registerCommand(commandText, () => {
+          applySurroundItem(key, surroundConfig);
+        })
+      );
+    }
   });
 }
 
