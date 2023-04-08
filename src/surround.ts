@@ -170,19 +170,19 @@ function trimSelections(): void {
 function applyQuickPick(item: QuickPickItem, surroundItems: ISurroundItem[]) {
   const activeEditor = window.activeTextEditor;
 
-  if (activeEditor && item) {
-    const surroundItem = surroundItems.find((s) => item.label === s.label);
-    if (surroundItem) {
-      try {
-        trimSelections();
-        activeEditor.insertSnippet(new SnippetString(surroundItem.snippet));
-      } catch (err) {
-        window.showErrorMessage(
-          "Could not apply surround snippet: " + surroundItem.label,
-          String(err)
-        );
-      }
-    }
+  if (!activeEditor || !item) { return; }
+
+  const surroundItem = surroundItems.find((s) => item.label === s.label);
+  if (!surroundItem) { return; }
+  
+  try {
+    trimSelections();
+    activeEditor.insertSnippet(new SnippetString(surroundItem.snippet));
+  } catch (err) {
+    window.showErrorMessage(
+      "Could not apply surround snippet: " + surroundItem.label,
+      String(err)
+    );
   }
 }
 
